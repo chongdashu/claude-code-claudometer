@@ -91,3 +91,7 @@ export function getDatabase(): Database {
   }
   return db;
 }
+
+export function clearDatabase(): void {
+  db = null;
+}
