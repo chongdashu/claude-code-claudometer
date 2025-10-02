@@ -43,7 +43,7 @@ class InMemoryDatabase implements Database {
   }
 
   async insertScoredItem(item: ScoredItem): Promise<void> {
-    const key = `${item.subreddit}-${new Date(item.timestamp).toISOString().split('T')[0]}`;
+    const key = `${item.subreddit}-${new Date(item.timestamp * 1000).toISOString().split('T')[0]}`;
     if (!this.scoredItems.has(key)) {
       this.scoredItems.set(key, []);
     }

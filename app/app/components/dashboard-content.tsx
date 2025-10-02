@@ -25,14 +25,14 @@ export function DashboardContent() {
   const { data, refetch } = useQuery({
     queryKey: ['sentiment-aggregate', selectedSubreddit, timeRange],
     queryFn: async () => {
-      const subreddit = selectedSubreddit.toLowerCase();
+      const subreddit = selectedSubreddit === 'All' ? 'all' : selectedSubreddit;
       const response = await fetch(`/api/sentiment/aggregate?subreddit=${subreddit}&timeRange=${timeRange}`);
       return response.json();
     },
   });
 
   const handleExport = async () => {
-    const subreddit = selectedSubreddit.toLowerCase();
+    const subreddit = selectedSubreddit === 'All' ? 'all' : selectedSubreddit;
     window.open(`/api/export/csv?subreddit=${subreddit}&timeRange=${timeRange}`, '_blank');
   };
 
