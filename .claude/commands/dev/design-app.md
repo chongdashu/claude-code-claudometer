@@ -2,7 +2,7 @@
 allowed-tools: Task, Read, Write, TodoWrite
 description: Design Next.js full-stack application architecture from PRD with test-first specifications
 argument-hint: <prd-file-path>
-required-agents: orchestrator, ui-designer, shadcn-expert, stagehand-expert, system-architect, youtube-api-expert, chatgpt-expert
+required-agents: orchestrator, ui-designer, shadcn-expert, stagehand-expert, system-architect, reddit-api-expert, chatgpt-expert
 agent-execution-pattern: sequential-then-parallel
 minimum-task-calls: 8
 ---
@@ -26,7 +26,7 @@ Create a comprehensive Next.js 15 application design with test-first specificati
 ```bash
 Phase 1: Task(orchestrator) - Setup only
 Phase 2: Task(ui-designer) - Wireframes  
-Phase 3: Task(shadcn-expert) + Task(stagehand-expert) + Task(youtube-api-expert) + Task(chatgpt-expert) - Parallel (4 calls in 1 message)
+Phase 3: Task(shadcn-expert) + Task(stagehand-expert) + Task(reddit-api-expert) + Task(chatgpt-expert) - Parallel (4 calls in 1 message)
 Phase 4: Task(system-architect) - Integration architecture after parallel outputs
 Phase 5: Task(orchestrator) - Synthesis
 Total Task calls: 8 (minimum)
@@ -80,7 +80,7 @@ The **shadcn-expert** agent now provides comprehensive visual design capabilitie
 - **shadcn-expert**: `component-implementation.md` - Component selection, design system, exact values
 - **stagehand-expert**: `test-specifications.md` - E2E test plan and executable test cases
 - **system-architect**: `integration-architecture.md` - Complete integration patterns, API routes, data flow
-- **youtube-api-expert**: `youtube-integration.md` - API plan with embedded TypeScript implementation
+- **reddit-api-expert**: `reddit-integration.md` - API plan with embedded TypeScript implementation
 - **chatgpt-expert**: `ai-integration.md` - OpenAI plan with embedded TypeScript implementation
 
 ### Required Concrete Deliverables (App-Specific)
@@ -184,10 +184,10 @@ You **MUST** execute Phase 3A, Phase 3B, Phase 3C, and Phase 3D in parallel usin
 - stagehand-expert → E2E test specifications (uses ui-designer output)
 ```
 
-#### Phase 3C: YouTube API Integration Design
+#### Phase 3C: Reddit API Integration Design
 
 ```bash
-- youtube-api-expert → YouTube Data API v3 integration plan, quota management, caching strategy (24-hour TTL)
+- reddit-api-expert → Reddit API integration plan, rate limiting, caching strategy, authentication patterns
 ```
 
 #### Phase 3D: AI Integration Design
@@ -213,7 +213,7 @@ You **MUST** execute Phase 3A, Phase 3B, Phase 3C, and Phase 3D in parallel usin
   • Caching layer coordination between frontend and backend
   • Error handling and retry patterns across layers
   • Session and request scoping strategies
-  • Synthesizes outputs from shadcn, stagehand, youtube-api, and chatgpt experts
+  • Synthesizes outputs from shadcn, stagehand, reddit-api, and chatgpt experts
 ```
 
 ### Phase 5: Orchestrator Synthesis & Validation (Sequential - Requires All Inputs)
@@ -266,8 +266,8 @@ You **MUST** execute Phase 3A, Phase 3B, Phase 3C, and Phase 3D in parallel usin
 │   └── test-specifications.md        # E2E test plan and test cases
 ├── system-architect/[project-name]-[timestamp]/
 │   └── integration-architecture.md   # Complete integration patterns connecting all layers
-├── youtube-api-expert/[project-name]-[timestamp]/
-│   └── youtube-integration.md        # API integration plan with implementation code
+├── reddit-api-expert/[project-name]-[timestamp]/
+│   └── reddit-integration.md        # API integration plan with implementation code
 └── chatgpt-expert/[project-name]-[timestamp]/
     └── ai-integration.md             # OpenAI integration plan with implementation code
 ```
@@ -311,7 +311,7 @@ The command execution pattern:
   # system-architect task
 </invoke>
 <invoke name="Task">
-  # youtube-api-expert task
+  # reddit-api-expert task
 </invoke>
 <invoke name="Task">
   # chatgpt-expert task
@@ -332,7 +332,7 @@ ui-designer → wireframes, component hierarchy, user flows
 
 # Phase 3: Parallel (spawn simultaneously, using ui-designer output)
 # CRITICAL: Use FOUR Task tool calls in SINGLE message for true parallelism
-shadcn-expert + stagehand-expert + youtube-api-expert + chatgpt-expert
+shadcn-expert + stagehand-expert + reddit-api-expert + chatgpt-expert
 (simultaneous Task calls)
 
 # Phase 4: Sequential (requires all parallel inputs)
@@ -387,12 +387,12 @@ Task(system-architect):
 Output to .claude/outputs/design/agents/system-architect/[project-name]-[timestamp]/"
 ```
 
-### Phase 3D - YouTube API Expert (Parallel)
+### Phase 3D - Reddit API Expert (Parallel)
 ```
-Task(youtube-api-expert):
-"Read PRD at [path] and architecture notes. Design YouTube Data API v3 integration with quota management and 24-hour caching strategy.
+Task(reddit-api-expert):
+"Read PRD at [path] and architecture notes. Design Reddit API integration with rate limiting, OAuth authentication, and caching strategy.
 Include implementation code within the integration plan markdown file.
-Output to .claude/outputs/design/agents/youtube-api-expert/[project-name]-[timestamp]/"
+Output to .claude/outputs/design/agents/reddit-api-expert/[project-name]-[timestamp]/"
 ```
 
 ### Phase 3E - ChatGPT Expert (Parallel)  
@@ -415,7 +415,7 @@ DO NOT create redundant implementation plans - those exist in agent outputs. DO 
 Before proceeding, verify:
 - [ ] Are you calling Task tool 7+ times (not just once)?
 - [ ] Is orchestrator limited to setup (Phase 1) and synthesis (Phase 4) only?
-- [ ] Are Phase 3 agents (shadcn-expert + stagehand-expert + system-architect + youtube-api-expert + chatgpt-expert) invoked in a SINGLE message with FIVE Task calls?
+- [ ] Are Phase 3 agents (shadcn-expert + stagehand-expert + system-architect + reddit-api-expert + chatgpt-expert) invoked in a SINGLE message with FIVE Task calls?
 - [ ] Does each agent have a focused, specific prompt that matches the templates above?
 - [ ] Are you (Claude Code) coordinating, not delegating coordination to orchestrator?
 - [ ] Did you output your execution plan summary before starting?
@@ -435,7 +435,7 @@ The design process ensures 100% PRD coverage across all agents:
 - ✓ **shadcn-expert**: Visual component selection, beautiful design systems & aesthetic integration - 1 file output
 - ✓ **stagehand-expert**: User acceptance criteria & E2E testing - 1 file output
 - ✓ **system-architect**: Integration architecture, API routes, data flow, state management - 1 file output
-- ✓ **youtube-api-expert**: YouTube Data API v3 integration, quota management, caching (24-hour) - 1 file output
+- ✓ **reddit-api-expert**: Reddit API integration, rate limiting, OAuth authentication, caching - 1 file output
 - ✓ **chatgpt-expert**: OpenAI API integration, sentiment analysis, prompt engineering (7-day cache) - 1 file output
 - ✓ **orchestrator**: Cross-agent validation & MANIFEST finalization (synthesis) - 1 file output
 
@@ -458,7 +458,7 @@ The design is optimized for Next.js 15 App Router with React 19:
 Execution Plan Summary:
 Phase 1: Task(orchestrator) - Setup folders and initial MANIFEST only
 Phase 2: Task(ui-designer) - Create wireframes and user flows
-Phase 3: Task(shadcn-expert) + Task(stagehand-expert) + Task(system-architect) + Task(youtube-api-expert) + Task(chatgpt-expert) - Parallel in single message
+Phase 3: Task(shadcn-expert) + Task(stagehand-expert) + Task(system-architect) + Task(reddit-api-expert) + Task(chatgpt-expert) - Parallel in single message
 Phase 5: Task(orchestrator) - Synthesize outputs into implementation plan
 Total Task calls: 8
 Estimated completion: [time estimate]
@@ -475,7 +475,7 @@ A complete design includes outputs from all phases:
 - ✓ **Phase 3A**: Visual shadcn/ui component selections, beautiful design systems & aesthetic customizations (shadcn-expert)
 - ✓ **Phase 3B**: E2E test specifications covering all user stories (stagehand-expert)
 - ✓ **Phase 3C**: Complete system integration architecture connecting all components (system-architect)
-- ✓ **Phase 3D**: YouTube API integration plan with caching strategy (youtube-api-expert)
+- ✓ **Phase 3D**: Reddit API integration plan with caching strategy (reddit-api-expert)
 - ✓ **Phase 3E**: OpenAI API integration for sentiment analysis (chatgpt-expert)
 - ✓ **Phase 5**: Complete MANIFEST linking all outputs (orchestrator synthesis - 1 file)
 

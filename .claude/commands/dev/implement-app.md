@@ -25,7 +25,7 @@ This command requires design outputs from `/design-app`:
 - Agent outputs in `.claude/outputs/design/agents/`:
   - `ui-designer/` - Visual specifications, wireframes, component hierarchy
   - `shadcn-expert/` - Component selections and implementation patterns
-  - `youtube-api-expert/` - API integration specifications
+  - `reddit-api-expert/` - API integration specifications
   - `chatgpt-expert/` - AI service integration patterns
   - `stagehand-expert/` - Testing strategies (for reference)
 
@@ -48,10 +48,10 @@ The command will automatically read:
 
 ```bash
 # Implement from design folder path
-/implement-app .claude/outputs/design/projects/youtube-social-proof/20250904-141128
+/implement-app .claude/outputs/design/projects/reddit-sentiment-monitor/20250904-141128
 
 # Specify custom app folder
-/implement-app .claude/outputs/design/projects/youtube-social-proof/20250904-141128 ./youtube-widget-app
+/implement-app .claude/outputs/design/projects/reddit-sentiment-monitor/20250904-141128 ./reddit-sentiment-app
 ```
 
 ## Practical Implementation Workflow with Design Integration
@@ -71,7 +71,7 @@ Before writing any code, thoroughly analyze the design outputs to understand the
 interface DesignSpecification {
   colors: Record<string, string>; // Exact hex values from design
   components: ComponentHierarchy; // From shadcn-expert
-  apiIntegration: ServicePatterns; // From youtube-api-expert
+  apiIntegration: ServicePatterns; // From reddit-api-expert
   aiServices: AIServiceConfig; // From chatgpt-expert
 }
 ```
@@ -80,7 +80,7 @@ interface DesignSpecification {
 
 - [ ] Visual specifications extracted from ui-designer outputs
 - [ ] Component selections and patterns from shadcn-expert
-- [ ] API integration patterns from youtube-api-expert
+- [ ] API integration patterns from reddit-api-expert
 - [ ] AI service configuration from chatgpt-expert
 - [ ] Technology stack confirmed from MANIFEST.md
 
@@ -96,29 +96,31 @@ interface DesignSpecification {
 - `MANIFEST.md` - Complete project scope, requirements, and 4-week roadmap
 - `ui-designer/design-specification.md` - Visual structure, wireframes, component hierarchy
 - `shadcn-expert/component-implementation.md` - Component selections and implementation patterns
-- `youtube-api-expert/youtube-integration.md` - API service architecture and caching
+- `reddit-api-expert/reddit-integration.md` - API service architecture and caching
 - `chatgpt-expert/ai-integration.md` - Sentiment analysis and AI service integration
 - `stagehand-expert/test-specifications.md` - Testing strategies (for reference)
 
 **1.2. API Integration Planning**
 
-For YouTube Social Proof app, focus on:
+For Reddit Sentiment Monitor app, focus on:
 
-- **YouTube Data API v3**: Video metadata and comments extraction
+- **Reddit API**: Posts and comments from r/ClaudeAI, r/ClaudeCode, r/Anthropic
 - **OpenAI API**: Sentiment analysis with GPT-3.5-turbo-0125
-- **Caching Strategy**: 24-hour YouTube cache, 7-day sentiment cache
+- **Caching Strategy**: Reddit data caching, sentiment cache with appropriate TTL
 - **Type Safety**: Create interfaces for all API responses
 
 **Example from Design Specifications**:
 
 ```typescript
-// Based on youtube-api-expert outputs
-interface YouTubeVideoData {
+// Based on reddit-api-expert outputs
+interface RedditPostData {
   id: string;
+  subreddit: string;
   title: string;
-  channelTitle: string;
-  statistics: VideoStatistics;
-  commentThreads: CommentThread[];
+  body: string;
+  author: string;
+  score: number;
+  created_utc: number;
 }
 ```
 
@@ -130,14 +132,14 @@ Follow the MANIFEST.md roadmap for practical setup:
 - Assess current state if project files exist
 - Initialize Next.js 14 with TypeScript if starting fresh
 - Install shadcn/ui components specified in design outputs
-- Setup environment variables for YouTube API and OpenAI
+- Setup environment variables for Reddit API and OpenAI
 
 **3. Create Basic Project Structure**
 
 Establish core structure before implementation:
 
 - Setup Next.js pages/API routes structure
-- Create service classes for YouTube and OpenAI integration
+- Create service classes for Reddit and OpenAI integration
 - Implement basic TypeScript interfaces from design specifications
 - Configure Tailwind CSS with design system colors
 - Create placeholder components identified in ui-designer outputs
@@ -148,12 +150,12 @@ Establish core structure before implementation:
 
 Implement core services based on design specifications before UI:
 
-**YouTube Data API Service**
+**Reddit API Service**
 
-- Implement service class from `youtube-api-expert` specifications
-- Add video metadata extraction with proper error handling
-- Implement comment fetching with pagination
-- Add 24-hour caching mechanism (Redis/NodeCache fallback)
+- Implement service class from `reddit-api-expert` specifications
+- Add post and comment extraction with proper error handling
+- Implement OAuth authentication and rate limiting
+- Add caching mechanism per design specifications
 
 **OpenAI Sentiment Analysis Service**
 
@@ -177,10 +179,10 @@ Implement UI components based on design specifications:
 
 **Core Pages (from ui-designer outputs)**
 
-- Landing page with URL input (trust blue theme)
-- Processing screen with progress indicators
-- Widget preview with customization controls
-- Export/embed code generation
+- Dashboard with time selector and subreddit tabs
+- Sentiment/volume charts and keyword visualization
+- Drill-down detail views for daily posts
+- CSV export functionality
 
 **shadcn/ui Component Integration**
 
@@ -189,12 +191,12 @@ Implement UI components based on design specifications:
 - Add Card, Badge, and Progress components for widget display
 - Setup responsive layout with proper breakpoints
 
-**Widget Generation Pipeline**
+**Data Visualization Pipeline**
 
-- Connect UI to YouTube API service
+- Connect UI to Reddit API service
 - Implement sentiment analysis integration
-- Create widget preview with live updates
-- Add comment carousel functionality
+- Create interactive charts with live updates
+- Add drill-down functionality to daily details
 
 **Key Implementation Principles**:
 
@@ -211,17 +213,17 @@ Connect all components into working application:
 
 **Complete User Flow Implementation**
 
-1. URL input validation and submission
-2. YouTube API data fetching with progress indicators
-3. Sentiment analysis processing of comments
-4. Widget preview generation with customization options
-5. Embed code generation in multiple formats
+1. Time range selection (7/30/90 days)
+2. Reddit API data fetching with progress indicators
+3. Sentiment analysis processing of posts/comments
+4. Interactive chart rendering with subreddit filtering
+5. CSV export generation
 
 **Error Handling and Edge Cases**
 
-- Private/deleted video handling
-- Disabled comments scenarios
-- API quota exceeded fallbacks
+- Deleted/removed posts handling
+- Subreddit access issues
+- API rate limit management
 - Network error recovery
 - Invalid URL input validation
 
@@ -254,7 +256,7 @@ Prepare application for deployment:
 
 Implement essential tests for key workflows:
 
-- YouTube API integration smoke tests
+- Reddit API integration smoke tests
 - Sentiment analysis service validation
 - Widget generation end-to-end test
 - Error handling verification
@@ -293,7 +295,7 @@ The implementation strategy prioritizes rapid delivery with design specification
 - `MANIFEST.md`: Complete requirements and 4-week roadmap
 - `ui-designer outputs`: Visual specifications and component hierarchy
 - `shadcn-expert outputs`: Component selections and implementation patterns
-- `youtube-api-expert outputs`: Service architecture and caching strategies
+- `reddit-api-expert outputs`: Service architecture and caching strategies
 - `chatgpt-expert outputs`: AI integration and cost optimization
 - `stagehand-expert outputs`: Testing strategies for future enhancement
 
@@ -308,7 +310,7 @@ The implementation strategy prioritizes rapid delivery with design specification
 
 **Phase 2 - Service Implementation:**
 
-- Follow youtube-api-expert specifications for YouTube Data API v3 integration
+- Follow reddit-api-expert specifications for Reddit API integration
 - Implement chatgpt-expert patterns for OpenAI sentiment analysis
 - Create caching strategies per API expert recommendations
 - Build proper TypeScript interfaces and error handling
@@ -346,18 +348,18 @@ The command automatically determines project setup requirements and implementati
 ### Technical Implementation Success
 
 ✅ Next.js app initialized with TypeScript and shadcn/ui
-✅ YouTube Data API v3 service properly integrated
+✅ Reddit API service properly integrated with OAuth
 ✅ OpenAI sentiment analysis service working with cost optimization
-✅ Dual-layer caching implemented (24hr YouTube, 7-day sentiment)
+✅ Caching implemented per design specifications
 ✅ UI components match design specifications exactly
 
 ### Functional Success
 
-✅ Complete user workflow: URL input → processing → widget preview → export
-✅ Error handling for private videos, disabled comments, API limits
+✅ Complete user workflow: time selection → data fetch → visualization → export
+✅ Error handling for deleted posts, subreddit access, rate limits
 ✅ Responsive design working across all specified breakpoints
-✅ Widget embedding in multiple formats (iframe, JS, React)
-✅ Cost projections validated (<$0.02 per widget)
+✅ Interactive charts with drill-down functionality
+✅ CSV export working correctly
 
 ### Production Readiness
 
@@ -374,7 +376,7 @@ The command automatically determines project setup requirements and implementati
 - **Must** read ALL design outputs before starting implementation
 - **Must** follow UI designer visual specifications and component hierarchy
 - **Must** use shadcn-expert component selections and patterns
-- **Must** implement API services per youtube-api-expert and chatgpt-expert specs
+- **Must** implement API services per reddit-api-expert and chatgpt-expert specs
 - **Should** reference stagehand-expert for testing strategies
 
 ### Implementation Phase (Practical Approach)
@@ -393,10 +395,10 @@ The command automatically determines project setup requirements and implementati
 
 ### User Confirmation Points
 
-- Show working YouTube URL processing
-- Demonstrate sentiment analysis and comment curation
-- Present widget preview with customization options
-- Verify embed code generation in multiple formats
+- Show working Reddit data fetching from multiple subreddits
+- Demonstrate sentiment analysis and aggregation
+- Present interactive charts with filtering options
+- Verify CSV export functionality
 
 ## Implementation Patterns
 
@@ -406,7 +408,7 @@ Translate design outputs directly into implementation:
 
 **Service Implementation Strategy**:
 
-1. Read `youtube-api-expert` outputs for API service architecture
+1. Read `reddit-api-expert` outputs for API service architecture
 2. Read `chatgpt-expert` outputs for AI integration patterns
 3. Create services that implement EXACT specifications from design
 
@@ -445,9 +447,9 @@ Build functionality incrementally based on design outputs:
 
 ### API Integration Issues
 
-- Verify YouTube Data API v3 credentials are properly configured
+- Verify Reddit API OAuth credentials are properly configured
 - Check OpenAI API key setup and quota limits
-- Implement proper error handling per youtube-api-expert specifications
+- Implement proper error handling per reddit-api-expert specifications
 - Test caching mechanisms work correctly
 
 ### UI Component Implementation Problems
@@ -471,7 +473,7 @@ Build functionality incrementally based on design outputs:
 
 **Critical Path Testing**:
 
-- API integration smoke tests (YouTube, OpenAI)
+- API integration smoke tests (Reddit, OpenAI)
 - End-to-end widget generation workflow
 - Error handling for edge cases
 - Performance validation for cost projections
