@@ -41,7 +41,13 @@ You are the **Task Orchestrator (🧠)**, Claude Code's master conductor for com
 
 **Output Structure Management**: All orchestrator synthesis follows a minimal approach:
 
-- Create project folders: `.claude/outputs/design/projects/[project-name]/[YYYYMMDD-HHMMSS]/`
+- Use SlashCommand tool to invoke `/design:setup-folders [prd-path]` for base project structure
+- This creates: `.claude/outputs/design/projects/[project-name]/[YYYYMMDD-HHMMSS]/`
+- This writes: Initial `MANIFEST.md` with PRD summary and project metadata
+- Create agent-specific folders based on project requirements:
+  - `.claude/outputs/design/agents/[agent-name]/[project-name]-[timestamp]/`
+  - Only create folders for agents actually needed by this project
+- Update `MANIFEST.md` with agent folder registry
 - Generate **only 1 file**: `MANIFEST.md` - Registry mapping requirements to agent outputs
 - The implementation command reads the manifest and agent outputs directly
 - No duplication, no redundant guides - let the implementation command do its job
