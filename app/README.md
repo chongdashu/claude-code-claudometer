@@ -1,8 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Claude Code Sentiment Monitor
 
-## Getting Started
+A Next.js 15 application that tracks and visualizes Reddit sentiment about Claude Code from r/ClaudeAI, r/ClaudeCode, and r/Anthropic.
 
-First, run the development server:
+## Features
+
+- **Multi-Subreddit Tracking**: Monitor sentiment across 3 key subreddits
+- **Daily Aggregations**: View sentiment trends over 7, 30, or 90 days
+- **Interactive Charts**: Line chart for sentiment, bar chart for volume
+- **Keyword Analysis**: See top keywords and trending topics
+- **Drill-Down Details**: Click any day to view sample posts with sentiment scores
+- **CSV Export**: Download sentiment data for further analysis
+- **Responsive Design**: Works on desktop, tablet, and mobile
+
+## Tech Stack
+
+- **Frontend**: Next.js 15, React 19, TypeScript
+- **UI Components**: shadcn/ui, Tailwind CSS
+- **Charts**: Recharts
+- **Data Fetching**: React Query
+- **APIs**: Reddit OAuth API, OpenAI GPT-3.5-turbo
+
+## Setup
+
+### Prerequisites
+
+- Node.js 18+ and npm
+- Reddit API credentials (client ID, client secret)
+- OpenAI API key
+
+### Environment Variables
+
+Create a `.env.local` file in the root directory:
+
+```env
+# Reddit API Configuration
+REDDIT_CLIENT_ID=your_reddit_client_id
+REDDIT_CLIENT_SECRET=your_reddit_client_secret
+REDDIT_USER_AGENT=ClaudeCodeSentimentMonitor/1.0
+
+# OpenAI API Configuration
+OPENAI_API_KEY=your_openai_api_key
+```
+
+### Installation
+
+```bash
+# Install dependencies
+npm install
+
+# Initialize sample data (for demonstration)
+# Visit http://localhost:3000/api/init after starting dev server
+
+# Run development server
 
 ```bash
 npm run dev
