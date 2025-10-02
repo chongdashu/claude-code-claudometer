@@ -82,16 +82,18 @@ class InMemoryDatabase implements Database {
   }
 }
 
-// Singleton instance
-let db: Database | null = null;
+// Singleton instance - use global scope to persist in Next.js dev mode
+declare global {
+  var _db: Database | undefined;
+}
 
 export function getDatabase(): Database {
-  if (!db) {
-    db = new InMemoryDatabase();
+  if (!global._db) {
+    global._db = new InMemoryDatabase();
   }
-  return db;
+  return global._db;
 }
 
 export function clearDatabase(): void {
-  db = null;
+  global._db = undefined;
 }

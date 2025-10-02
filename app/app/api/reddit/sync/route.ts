@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { days = 7 } = await request.json().catch(() => ({}));
+    const { days = 7, maxPostsPerSubreddit = 100 } = await request.json().catch(() => ({}));
 
     // Initialize services
     const redditService = createRedditService();
@@ -39,19 +39,20 @@ export async function POST(request: NextRequest) {
     const aggregationService = createAggregationService();
     const db = getDatabase();
 
-    console.log(`Starting Reddit sync for last ${days} days...`);
+    console.log(`Starting Reddit sync for last ${days} days, max ${maxPostsPerSubreddit} posts per subreddit...`);
 
-    // Fetch posts from all subreddits
-    const subredditPosts = await redditService.fetchFromAllSubreddits(100);
+    // Fetch posts from all subreddits (with limit)
+    const subredditPosts = await redditService.fetchFromAllSubreddits(maxPostsPerSubreddit);
 
     let totalProcessed = 0;
     const processedDates = new Set<string>();
 
-    // Process each subreddit's posts
+    // Process each subreddit's posts (limited by maxPostsPerSubreddit)
     for (const [subreddit, posts] of subredditPosts.entries()) {
-      console.log(`Processing ${posts.length} posts from r/${subreddit}`);
+      const postsToProcess = posts.slice(0, maxPostsPerSubreddit);
+      console.log(`Processing ${postsToProcess.length} posts from r/${subreddit}`);
 
-      for (const post of posts) {
+      for (const post of postsToProcess) {
         // Analyze sentiment
         const content = `${post.title} ${post.body}`.trim();
         const sentiment = await sentimentService.analyzeSentiment(content);
@@ -82,7 +83,9 @@ export async function POST(request: NextRequest) {
     // Aggregate all processed dates
     console.log('Aggregating daily data...');
     for (const key of processedDates) {
-      const [subreddit, date] = key.split('-');
+      const [subreddit, ...dateParts] = key.split('-');
+      const date = dateParts.join('-');
+      console.log(`Aggregating ${subreddit} for date ${date}`);
       await aggregationService.aggregateDay(subreddit, date);
     }
 
