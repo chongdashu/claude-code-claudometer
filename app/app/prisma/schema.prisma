@@ -1,0 +1,95 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model RawPost {
+  id          String   @id
+  subreddit   String
+  author      String
+  title       String
+  body        String?
+  score       Int
+  createdAt   DateTime @map("created_at")
+  fetchedAt   DateTime @map("fetched_at") @default(now())
+  url         String
+  numComments Int      @map("num_comments")
+
+  comments    RawComment[]
+  sentiment   SentimentResult?
+
+  @@index([subreddit, createdAt])
+  @@index([createdAt])
+  @@map("raw_posts")
+}
+
+model RawComment {
+  id         String   @id
+  postId     String   @map("post_id")
+  subreddit  String
+  author     String
+  body       String
+  score      Int
+  createdAt  DateTime @map("created_at")
+  fetchedAt  DateTime @map("fetched_at") @default(now())
+  parentId   String?  @map("parent_id")
+
+  post       RawPost  @relation(fields: [postId], references: [id], onDelete: Cascade)
+  sentiment  SentimentResult?
+
+  @@index([postId])
+  @@index([subreddit, createdAt])
+  @@map("raw_comments")
+}
+
+model SentimentResult {
+  id             String   @id @default(cuid())
+  itemId         String   @unique @map("item_id")
+  itemType       String   @map("item_type") // "post" or "comment"
+  sentiment      Float    // -1 to +1
+  positiveScore  Float    @map("positive_score")
+  negativeScore  Float    @map("negative_score")
+  neutralScore   Float    @map("neutral_score")
+  confidence     Float
+  reasoning      String?
+  analyzedAt     DateTime @map("analyzed_at") @default(now())
+  cacheKey       String   @unique @map("cache_key")
+
+  post           RawPost?    @relation(fields: [itemId], references: [id], onDelete: Cascade, map: "sentiment_post_fk")
+  comment        RawComment? @relation(fields: [itemId], references: [id], onDelete: Cascade, map: "sentiment_comment_fk")
+
+  @@index([itemType, analyzedAt])
+  @@index([cacheKey])
+  @@map("sentiment_results")
+}
+
+model DailyAggregate {
+  id             String   @id @default(cuid())
+  date           DateTime @db.Date
+  subreddit      String
+  avgSentiment   Float    @map("avg_sentiment")
+  positiveCount  Int      @map("positive_count")
+  negativeCount  Int      @map("negative_count")
+  neutralCount   Int      @map("neutral_count")
+  totalCount     Int      @map("total_count")
+  volumePosts    Int      @map("volume_posts")
+  volumeComments Int      @map("volume_comments")
+  createdAt      DateTime @map("created_at") @default(now())
+  updatedAt      DateTime @map("updated_at") @updatedAt
+
+  @@unique([date, subreddit])
+  @@index([subreddit, date])
+  @@index([date])
+  @@map("daily_aggregates")
+}
