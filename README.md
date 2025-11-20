@@ -1,4 +1,4 @@
-# Claudometer - Reddit Sentiment Analysis for Claude Code
+# AI Subreddit Sentiment Tracker - Reddit Sentiment Analysis for Claude Code
 
 <div align="center">
 
@@ -45,7 +45,7 @@
 
 ### **[🎯 Get the Complete Builder Pack →](https://rebrand.ly/d0e3fe)**
 
-*Want a preview? [Join AI Oriented Insiders Club](https://aioriented.com) for free access to custom slash commands*
+*Want a preview? [Join AI Oriented Insiders Club](https://aioriented.dev) for free access to custom slash commands*
 
 ---
 
@@ -81,7 +81,7 @@ This repository showcases a working sentiment analysis application with:
 ## 📁 Repository Structure
 
 ```
-cc-claudometer/
+cc-ai-subreddit-sentiment-tracker/
 ├── .claude/                    # Claude Code Configuration
 │   ├── agents/                 # Specialized agents
 │   │   └── research-planning/
@@ -101,7 +101,7 @@ cc-claudometer/
 ```
 
 > **🏗️ The complete Next.js application, orchestrator, and custom slash commands are available in the [Builder Pack](https://rebrand.ly/d0e3fe)**
-> **🔓 Custom slash commands are available for free in the [Insiders Club](https://aioriented.com)**
+> **🔓 Custom slash commands are available for free in the [Insiders Club](https://aioriented.dev)**
 
 ---
 
@@ -159,7 +159,7 @@ This Insiders version gives you a taste, but the **Builder Pack** has everything
 
 - **`docs/PRD.md`** - Original Product Requirements Document
 
-> **🔓 Want custom slash commands for design and implementation workflows?** [Join the Insiders Club](https://aioriented.com) for free access to `/dev:design-app` and `/dev:implement-app`
+> **🔓 Want custom slash commands for design and implementation workflows?** [Join the Insiders Club](https://aioriented.dev) for free access to `/dev:design-app` and `/dev:implement-app`
 
 ---
 
@@ -194,8 +194,11 @@ This public repository gives you the foundation. The **Builder Pack** gives you 
 ## 🔗 Resources
 
 - **Claude Code Documentation:** https://docs.claude.com/code
-- **AI Oriented Insiders:** Join for free access to custom slash commands - https://aioriented.com
+- **AI Oriented Insiders:** Join for free access to custom slash commands - https://aioriented.dev
 - **Tutorial Video:** https://www.youtube.com/watch?v=fHPjgY7tgf8&feature=youtu.be
+
+### Similar Projects
+If you’d like to see another sentiment dashboard in this space, check out [Claudometer.app](https://claudometer.app) by [George Kouk](https://x.com/kouk_george).
 
 ---
 
